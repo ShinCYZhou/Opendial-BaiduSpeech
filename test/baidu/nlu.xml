@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<domain>
+  <model trigger="u_u">
+    
+
+    <!-- Extracts confirmations and disconfirmations -->
+    <rule>
+		<case>
+			<condition>
+				<if value="(yes|correct|exactly|sure|right|ok|yeah)" relation="contains" var="u_u"/>
+			</condition>
+			<effect>
+				<set value="Confirm" var="a_u" exclusive="false"/>
+		  
+			</effect>
+		</case>
+
+		<case>
+			<condition>
+				<if value="(no|nope|wrong)" relation="contains" var="u_u"/>
+			</condition>
+			<effect>
+				<set value="Disconfirm" var="a_u" exclusive="false"/>
+			</effect>
+		</case>
+	  <!--
+		<case>
+			<condition>
+				<if value="(yes|correct|exactly|sure|right|ok|no|nope|wrong)" relation="!=" var="u_u"/>
+			</condition>
+			<effect>
+				<set value="do_not_understand" var="a_u" exclusive="false"/>
+			</effect>
+		</case>
+		-->
+    </rule>
+	
+	
+	<!-- 电话号码输入，规则? -->
+	<rule>
+		<case>
+			<condition>
+			    <if var="current_step" value="register_phone_number" />
+				<if var="u_u" relation="contains" value="{phone_number}" />
+				<!-- <if var="{phone_number}" relation="&gt;" value="0" /> -->
+			</condition>
+			<effect>
+				<!-- <set var="a_u" value="Inform(phone_number,{phone_number})" /> 
+				<set var="u_m" value="confirmit!" /> -->
+				<set var="a_m" value="Ground(register_phone_number,{phone_number})" /> 
+				
+			</effect>
+		</case>
+
+	</rule>
+	
+	<!-- 存款金额输入 -->
+	<rule>
+		<case>
+			<condition>
+			    <if var="current_step" value="deposit_money" />
+				<if var="u_u" relation="contains" value="{money}" />
+				<!-- <if var="{phone_number}" relation="&gt;" value="0" /> -->
+			</condition>
+			<effect>
+				<!-- <set var="a_u" value="Inform(phone_number,{phone_number})" /> 
+				<set var="u_m" value="confirmit!" /> -->
+				<set var="a_m" value="Ground(deposit_money,{money})" /> 
+				
+			</effect>
+		</case>
+
+	</rule>
+
+  </model>
+
+  
+  <model trigger="a_u,a_m">
+    <rule>
+		<case>
+			<condition>
+				<if var="a_m" value="Confirm({Slot},{Value})" />
+				<if var="a_u" relation="contains" value="Confirm" />
+			</condition>
+			<effect>
+				<set var="{Slot}" value="{Value}" />
+			</effect>
+		</case>
+		<case>
+			<condition>
+				<if var="a_m" value="Confirm({Slot},{Value})" />
+				<if var="a_u" relation="contains" value="Disconfirm" />
+			</condition>
+			<effect>
+				<set var="{Slot}" value="None" />
+			</effect>
+		</case>
+	</rule>
+	
+	<rule>
+		<case>
+			<condition>
+				<if var="a_m" value="Ground({Slot},{Value})" />
+				<if var="a_u" relation="contains" value="Confirm" />
+			</condition>
+			<effect>
+				<set var="{Slot}" value="{Value}" />
+			</effect>
+		</case>
+	</rule>
+
+	
+	
+	
+<!--
+	
+	
+	<rule>
+			<case>
+				<condition>
+					<if var="current_step" value="register_phone_number" />
+					<if var="a_u" relation="contains" value="Inform(phone_number,{phone_number})" />
+				</condition>
+				<effect>
+					<set var="a_m" value="Confirm(register_phone_number,{phone_number})" />
+					<set var="{current_step}" value="{phone_number}" /> 
+				</effect>
+			</case>
+		</rule>	
+
+	
+		
+	<rule priority="2">
+		<case>
+			<effect>
+				<set var="phone_number" value="{phone_number}" />
+			</effect>
+		</case>
+	</rule>
+	-->
+
+  </model>
+  <!--
+   <settings>
+                <modules>opendial.plugins.NuanceSpeech</modules>
+                <id>NMDPTRIAL_1027437527_qq_com20170803021437</id>
+                <key>73c883da2ab3b94ccad2ff03e390c2feab273a1d14eca327aeb0b754acc0d61f8859f9b20cb2fed784fdda678e9c6639c3a056d78df9ff3ba9b69055766674fe</key>
+                <lang>eng-USA</lang>
+        </settings> -->
+		<settings>
+                <modules>opendial.plugins.SpeechUtil</modules>
+                <id>11679901</id>
+                <key>FMkPBfeCmc7kGQmhHr3prGzN</key>
+				<secret_key>WpWbnNu9SDUscwWTs2sQRtw1WXvGssCg</secret_key>			
+                <lang>zh</lang>
+    </settings>
+ 
+</domain>
