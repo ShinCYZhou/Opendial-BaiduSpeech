@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<domain>
+  <model trigger="current_step">
+  
+    <rule>
+      <case>
+        <condition>
+          <if value="do_have_bank_account" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Do you have a bank account?" var="u_m"/>
+		  <set value="Confirm(do_have_bank_account,{do_have_bank_account})" var="a_m"/>
+        </effect>
+      </case>
+    </rule>
+	
+
+
+    <rule>
+      <case>
+        <condition>
+          <if value="get_ID_card" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Please let the camera get your ID card!" var="u_m"/>
+		  <set value="Ground(get_ID_card)" var="a_m"/>
+        </effect>
+      </case>
+    </rule>
+	
+	<rule>
+      <case>
+        <condition>
+          <if value="confirm_info" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Please confirm your information!Is that correct?" var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+
+	<!-- 电话 -->
+	<rule>
+      <case>
+        <condition>
+          <if value="register_phone_number" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Please register your phone number!" var="u_m"/>
+	    </effect>
+	  <!-- <effect util="5">
+			<set var="a_m" value="Ground(register_phone_number,{phone_number})" />
+		</effect>
+		<effect util="0.5">
+			<set var="a_m" value="Confirm(register_phone_number,{phone_number})" />
+		</effect> -->
+      </case>
+    </rule>
+	
+	<rule>
+      <case>
+        <condition>
+          <if value="confirm_phone" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Please confirm your phone number! Is that correct?" var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+	
+    <rule>
+      <case>
+        <condition>
+          <if value="modify" var="current_step"/>
+        </condition>
+        <effect util="1">	       
+          <set value="Please modify your information (name,date of birth or ID number)!" var="u_m"/>
+		  <set value="Ground(modify)" var="a_m"/>
+        </effect>
+      </case>
+    </rule>
+	
+<!--
+	<rule>
+      <case>
+        <condition>
+          <if value="register_phone_number_again" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Please register your phone number again!" var="u_m"/>
+		  <set value="Ground(register_phone_number_again)" var="a_m"/>
+        </effect>
+      </case>
+    </rule>
+	-->
+    <rule>
+      <case>
+        <condition>
+          <if value="open_successfully" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Your account has been opened successfully!Do you want to deposit money?" var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+    
+	<rule>
+      <case>
+        <condition>
+          <if value="end" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Goodbye!" var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+	
+	<rule>
+      <case>
+        <condition>
+          <if value="voice_register" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="Please register your voice!" var="u_m"/>
+		  <set value="Ground(voice_register)" var="a_m"/> 
+        </effect>
+      </case>
+    </rule>
+	
+	
+     <rule>
+        <case>
+			<condition>
+				<if value="deposit_money" var="current_step"/>
+			</condition>
+			<effect util="1">	       
+				<set value="Please enter the deposit amount!" var="u_m"/>
+				
+			</effect>
+		</case>
+    </rule>
+	
+    <rule>
+        <case>
+			<condition>
+				<if value="deposit_successfully" var="current_step"/>
+			</condition>
+			<effect util="1">	       
+				<set value="You have deposited successfully! Goodbye!" var="u_m"/>
+				
+			</effect>
+		</case>
+    </rule>
+	
+	<rule>
+        <case>
+			<condition>
+				<if value="confirm_money" var="current_step"/>
+			</condition>
+			<effect util="1">	       
+				<set value="Please confirm your deposit amount! Is that correct?" var="u_m"/>
+				
+			</effect>
+		</case>
+    </rule>
+	
+  </model>
+
+
+
+  <model trigger="a_m">
+
+    <!-- grounding -->
+
+    <rule>
+      <case>
+        <condition>
+          <if value="Ground(deposit_money,{money})" var="a_m"/>
+        </condition>
+        <effect util="1">
+          <set value="OK, you want to deposit {money}." var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+    
+    <rule>
+      <case>
+        <condition>
+          <if value="Ground(register_phone_number,{phone_number})" var="a_m"/>
+        </condition>
+        <effect util="1">
+          <set value="OK,your phone number is {phone_number}." var="u_m"/>
+
+        </effect>
+      </case>
+    </rule>
+
+    <!-- confirm -->
+	
+
+    <rule>
+      <case>
+        <condition>
+          <if value="Confirm(deposit_money,{money})" var="a_m"/>
+        </condition>
+        <effect util="1">
+          <set value="You want to deposit {money}.Is that correct?" var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+
+    <rule>
+      <case>
+        <condition>
+          <if value="Confirm(register_phone_number,{phone_number})" var="a_m"/>
+        </condition>
+        <effect util="1">
+          <set value="Your phone number is {phone_number}.Is that correct?" var="u_m"/>
+        </effect>
+      </case>
+    </rule>
+  </model>
+
+ <!--  
+ <model trigger="do_not_understand">
+    <rule>
+		<case>
+			<condition>
+				<if value="do_not_understand" var="a_u"/>
+			</condition>
+			<effect util="1">
+				<set value="Sorry,I cannot understand you. Please try to use another way to answer！" var="u_m"/>
+			</effect>
+		</case>
+    </rule>
+  </model>
+  
+ -->
+ 
+ <settings>
+                <modules>opendial.plugins.NuanceSpeech</modules>
+                <id>NMDPTRIAL_1027437527_qq_com20170803021437</id>
+                <key>73c883da2ab3b94ccad2ff03e390c2feab273a1d14eca327aeb0b754acc0d61f8859f9b20cb2fed784fdda678e9c6639c3a056d78df9ff3ba9b69055766674fe</key>
+                <lang>eng-USA</lang>
+        </settings>
+	 <!--UTF-8	<settings>
+                <modules>opendial.plugins.SpeechUtil</modules>
+                <id>11679901</id>
+                <key>FMkPBfeCmc7kGQmhHr3prGzN</key>
+				<secret_key>WpWbnNu9SDUscwWTs2sQRtw1WXvGssCg</secret_key>			
+                <lang>en</lang>
+    </settings>-->
+</domain>
