@@ -1,10 +1,11 @@
 
 ## OpenDial
 本人修改：
-1. src/baiduTest/BaiduTest.java 单独测试百度接口   
-2. src/baiduTest/PCMplay.java 播放pcm格式文件   
-3. src/opendial.plugins/Baidu.java 接入opendial的百度TTS+语音识别   
-4. build.gradle文件
+1. src/baiduTest/BaiduTest.java 单独测试百度接口。需要修改文件路径   
+2. src/baiduTest/PCMplay.java 播放pcm格式文件。需要修改文件路径
+3. src/opendial.plugins/Baidu.java 接入opendial的百度TTS+语音识别。需要修改文件路径   
+4. test/baidu & test/nuance 办银行demo，XML文件。距离发布时间过长的话，需要修改百度和nuance的id和key，在官网即可申请。   
+5. build.gradle文件 
 
 
 **Main website**: [http://opendial-toolkit.net](http://opendial-toolkit.net).
