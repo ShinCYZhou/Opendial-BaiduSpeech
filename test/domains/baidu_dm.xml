@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<domain>
+<!--
+  <model trigger="register_phone_number">
+	<rule>
+		<case>
+			<condition>
+				<if var="current_step" value="register_phone_number" />
+			</condition>
+			<effect util="5">
+				<set var="a_m" value="Ground(register_phone_number,{phone_number})" />
+			</effect>
+			<effect util="0.5">
+				<set var="a_m" value="Confirm(register_phone_number,{phone_number})" />
+			</effect>
+		</case>
+	</rule>
+  </model>
+
+--> 
+
+  
+	
+  
+  <model trigger="a_u,a_m">
+    <!-- 更新状态 -->
+    <rule>
+	
+	  <!-- 还没有本行账户,flag -->
+      <case>
+        <condition>
+		  <if value="do_have_bank_account" var="current_step"/>
+          <if value="Disconfirm" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+		  <set value="0"  var="flag"/>
+          <set value="get_ID_card" var="current_step"/>
+        </effect>
+      </case>
+
+	  <!-- 已经有本行账户,flag -->  
+      <!-- 这里要声纹验证，这里默认为验证成功 -->	  
+      <case>
+        <condition>
+		  <if value="do_have_bank_account" var="current_step"/>
+          <if value="Confirm" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+		  <set value="1"  var="flag"/>
+	      <set value="Your voice has been successfully verified!" var="u_m"/>
+          <set value="get_ID_card" var="current_step"/>
+        </effect>
+      </case>
+	</rule>
+	   
+   
+	 <!-- 共同流程 -->
+	  <!-- 这里要调用外部模块，OCR提取姓名、性别、证件号 -->
+	<rule>  
+	   <case>
+        <condition>
+          <if value="get_ID_card" var="current_step"/>
+		  <if value="Ground(get_ID_card)" var="a_m"/>    <!-- 这里设置a_m为了能无条件运行下去 -->
+        </condition>
+        <effect prob="1">
+		  <set value="OCR processing!" var="u_m"/>
+          <set value="confirm_info" var="current_step"/>
+        </effect>
+      </case>
+	</rule> 
+	
+	
+	
+	<rule>
+	  <case>
+        <condition>
+          <if value="confirm_info" var="current_step"/>
+          <if value="Confirm" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+          <set value="register_phone_number" var="current_step"/>
+        </effect>
+      </case>
+	  
+	  <case>
+        <condition>
+          <if value="confirm_info" var="current_step"/>
+          <if value="Disconfirm" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+          <set value="modify" var="current_step"/>
+        </effect>
+      </case>
+	  
+	  <!-- 先默认用户不进行操作，继续运行下去 -->
+	   <case>
+        <condition>
+          <if value="modify" var="current_step"/>
+          <if value="Ground(modify)" var="a_m"/>
+        </condition>
+        <effect prob="1">		  
+          <set value="confirm_info" var="current_step"/>
+        </effect>
+      </case>
+	</rule>
+	
+	
+	
+	<!-- 电话号码绑定???? -->
+	<rule>
+		<case>
+			<condition>
+				<if var="current_step" value="register_phone_number" />
+				<if var="a_m" relation="contains" value="Ground(register_phone_number,{phone_number})" /> 
+				
+			</condition>
+			<effect>
+				<set value="confirm_phone" var="current_step"/>
+				
+			</effect>
+		</case>
+	</rule>
+	
+	<rule>
+		<case>
+			<condition>
+				<if value="confirm_phone" var="current_step"/>
+				<if value="Confirm" relation="contains" var="a_u"/>
+				<if var="flag" value="1" />                             <!--   flag=1,直接开户成功 -->
+			</condition>
+			<effect prob="1">
+				<set value="open_successfully" var="current_step"/>
+			</effect>
+		</case>
+		
+		<case>
+			<condition>
+				<if value="confirm_phone" var="current_step"/>
+				<if value="Confirm" relation="contains" var="a_u"/>
+				<if var="flag" value="0" />                             <!--   flag=0,先声纹登记，新用户开户特有  -->
+			</condition>
+			<effect prob="1">
+				<set value="voice_register" var="current_step"/>
+			</effect>
+		</case>
+		
+	
+	    <case>
+			<condition>
+				<if value="confirm_phone" var="current_step"/>
+				<if value="Disconfirm" relation="contains" var="a_u"/>
+			</condition>
+			<effect prob="1">
+				<!--<set value="None" var="{phone_number}"/>-->
+				<set value="Please register your phone number again!" var="u_m"/>
+				<set value="register_phone_number" var="current_step"/>
+			</effect>
+		</case>
+	
+	</rule>
+<!--	
+	<rule>
+		<case>
+			<condition>
+			     <if var="current_step" value="register_phone_number" />
+				<if var="a_u" relation="contains" value="Inform({phone_number})" />
+				<if var="{phone_number}" value="None" relation="!=" />		
+<set var="{current_step}" value="{phone_number}" />
+				<set var="a_m" value="Ground(register_phone_number,{phone_number})" />				
+				<if var="a_m" value="Ground(register_phone_number,*)" />
+				
+				
+				
+
+			</condition>
+			<effect prob="1">
+                <set value="open_successfully" var="current_step"/>
+            </effect>
+		</case>
+		
+		<case>
+			<condition>
+				<if var="current_step" value="register_phone_number" />
+				<if var="flag" value="0" />                              
+				<if var="a_u" relation="contains" value="Inform({phone_number})" />
+			</condition>
+			<effect prob="1">
+                <set value="voice_register" var="current_step"/>
+            </effect>
+		</case>
+	
+		<case>
+			<condition>
+				<if var="current_step" value="register_phone_number" />
+				<if var="a_u" relation="contains" value="Disconfirm" />
+			</condition>
+			<effect prob="1">
+                <set value="register_phone_number_again" var="current_step"/>
+            </effect>
+		</case>
+			
+		<case>
+			<condition>
+				<if var="current_step" value="register_phone_number_again" />
+				<if value="Ground(register_phone_number_again)" var="a_m"/>
+			</condition>
+			<effect prob="1">
+                <set value="register_phone_number" var="current_step"/>
+            </effect>
+		</case>
+	</rule>
+	-->
+	
+	<!-- 声纹登记，需要调用外部模块，这里默认登记成功 -->
+	<rule>  
+	   <case>
+        <condition>
+          <if value="voice_register" var="current_step"/>
+		  <if value="Ground(voice_register)" var="a_m"/>    <!-- 这里设置a_m为了能无条件运行下去 -->
+        </condition>
+        <effect prob="1">
+		  <set value="Your voice has been registered successfully!" var="u_m"/>
+          <set value="open_successfully" var="current_step"/>
+        </effect>
+      </case>
+	</rule> 
+	
+	
+	<!-- 是否存款 -->
+	<rule>
+      <case>
+        <condition>
+		  <if value="open_successfully" var="current_step"/>		  
+          <if value="Disconfirm" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+          <set value="end" var="current_step"/>
+        </effect>
+      </case>
+
+	  
+      <case>
+        <condition>
+		  <if value="open_successfully" var="current_step"/>
+          <if value="Confirm" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+          <set value="deposit_money" var="current_step"/>
+        </effect>
+      </case>
+	</rule>
+	
+	<!-- 存款 -->
+	<rule>
+		<case>
+			<condition>
+				<if var="current_step" value="deposit_money" />
+				<if var="a_m" relation="contains" value="Ground(deposit_money,{money})" /> 
+				
+			</condition>
+			<effect>
+				<set value="confirm_money" var="current_step"/>
+				
+			</effect>
+		</case>
+	</rule>
+	
+	<rule>
+		<case>
+			<condition>
+				<if value="confirm_money" var="current_step"/>
+				<if value="Confirm" relation="contains" var="a_u"/>
+			</condition>
+			<effect prob="1">
+				<set value="deposit_successfully" var="current_step"/>
+			</effect>
+		</case>
+		
+		
+	
+	    <case>
+			<condition>
+				<if value="confirm_money" var="current_step"/>
+				<if value="Disconfirm" relation="contains" var="a_u"/>
+			</condition>
+			<effect prob="1">
+				<!--<set value="None" var="{phone_number}"/>-->
+				<set value="Please enter the deposit again!" var="u_m"/>
+				<set value="deposit_money" var="current_step"/>
+			</effect>
+		</case>
+	
+	</rule>
+
+	
+	
+  </model>
+
+  <settings>
+                <modules>opendial.plugins.SpeechUtil</modules>
+                <id>11679901</id>
+                <key>FMkPBfeCmc7kGQmhHr3prGzN</key>
+				<secret_key>WpWbnNu9SDUscwWTs2sQRtw1WXvGssCg</secret_key>			
+                <lang>en</lang>
+    </settings>
+   <!-- 
+   <settings>
+                <modules>opendial.plugins.NuanceSpeech</modules>
+                <id>NMDPTRIAL_1027437527_qq_com20170803021437</id>
+                <key>73c883da2ab3b94ccad2ff03e390c2feab273a1d14eca327aeb0b754acc0d61f8859f9b20cb2fed784fdda678e9c6639c3a056d78df9ff3ba9b69055766674fe</key>
+                <lang>eng-USA</lang>
+        </settings>
+  -->
+</domain>
