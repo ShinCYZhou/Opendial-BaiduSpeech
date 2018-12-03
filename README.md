@@ -1,5 +1,11 @@
 
 ## OpenDial
+本人修改：
+## 1. src/baiduTest/BaiduTest.java 单独测试百度接口
+## 2. src/baiduTest/PCMplay.java 播放pcm格式文件
+## 3. src/opendial.plugins/Baidu.java 接入opendial的百度TTS+语音识别
+## 4. build.gradle文件
+
 
 **Main website**: [http://opendial-toolkit.net](http://opendial-toolkit.net).
 
