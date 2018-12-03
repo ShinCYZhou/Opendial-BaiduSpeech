@@ -1,4 +1,4 @@
-package opendial.utils;
+package baiduTest;
 
 import com.alibaba.fastjson.JSON;
 import com.baidu.aip.speech.AipSpeech;
@@ -26,10 +26,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * 百度语音工具�?
+ * 百度语音工具�?
  */
 @Slf4j
-public class SpeechUtilTest {
+public class BaiduTest {
 
 
     public static final String APP_ID = "14359027";
@@ -49,7 +49,7 @@ public class SpeechUtilTest {
 
 
     /**
-     * 单例 懒加载模�? 返回实例
+     * 单例 懒加载模�? 返回实例
      * @return
      */
     public static AipSpeech getInstance(){
@@ -71,7 +71,7 @@ public class SpeechUtilTest {
      */
     public static boolean SpeechSynthesizer(String word, String outputPath) {
         /*
-        �?长的长度
+        �?长的长度
          */
         int maxLength = 1024;
         if (word.getBytes().length >= maxLength) {
@@ -80,11 +80,11 @@ public class SpeechUtilTest {
         // 初始化一个AipSpeech
         client = getInstance();
 
-        // 可�?�：设置网络连接参数
+        // 可�?�：设置网络连接参数
         client.setConnectionTimeoutInMillis(2000);
         client.setSocketTimeoutInMillis(60000);
 
-        // 可�?�：设置代理服务器地�?, http和socket二�?�一，或者均不设�?
+        // 可�?�：设置代理服务器地�?, http和socket二�?�一，或者均不设�?
 //        client.setHttpProxy("proxy_host", proxy_port);  // 设置http代理
 //        client.setSocketProxy("proxy_host", proxy_port);  // 设置socket代理
 
@@ -118,11 +118,11 @@ public class SpeechUtilTest {
         // 初始化一个AipSpeech
         client = getInstance();
 
-        // 可�?�：设置网络连接参数
+        // 可�?�：设置网络连接参数
         client.setConnectionTimeoutInMillis(2000);
         client.setSocketTimeoutInMillis(60000);
 
-        // 可�?�：设置代理服务器地�?, http和socket二�?�一，或者均不设�?
+        // 可�?�：设置代理服务器地�?, http和socket二�?�一，或者均不设�?
 //        client.setHttpProxy("proxy_host", proxy_port);  // 设置http代理
 //        client.setSocketProxy("proxy_host", proxy_port);  // 设置socket代理
 
@@ -150,9 +150,9 @@ public class SpeechUtilTest {
      */
     public static boolean convertMP32Pcm(String mp3filepath, String pcmfilepath){
         try {
-            //获取文件的音频流，pcm的格�?
+            //获取文件的音频流，pcm的格�?
             AudioInputStream audioInputStream = getPcmAudioInputStream(mp3filepath);
-            //将音频转化为  pcm的格式保存下�?
+            //将音频转化为  pcm的格式保存下�?
             AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, new File(pcmfilepath));
             return true;
         } catch (IOException e) {

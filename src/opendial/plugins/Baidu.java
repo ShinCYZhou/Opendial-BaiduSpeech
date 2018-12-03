@@ -71,7 +71,7 @@ import com.alibaba.fastjson.JSON;
  * 
  * @author Pierre Lison (plison@ifi.uio.no)
  */
-public class SpeechUtil implements Module {
+public class Baidu implements Module {
 
 	 public static final String APP_ID = "11679901";
 
@@ -108,7 +108,7 @@ public class SpeechUtil implements Module {
 	 * 
 	 * @param system the dialogue system to attach @ in case of missing parameters
 	 */
-	public SpeechUtil(DialogueSystem system) {
+	public Baidu(DialogueSystem system) {
 		this.system = system;
 		List<String> missingParams =
 				new LinkedList<String>(Arrays.asList("id", "key",  "secret_key", "lang"));
