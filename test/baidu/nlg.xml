@@ -2,6 +2,18 @@
 <domain>
   <model trigger="current_step">
   
+      <rule>
+      <case>
+        <condition>
+          <if value="what_service" var="current_step"/>
+        </condition>
+        <effect util="1">
+          <set value="What service do you need?" var="u_m"/>
+		  <set value="Confirm(what_service,{what_service})" var="a_m"/>
+        </effect>
+      </case>
+    </rule>
+	
     <rule>
       <case>
         <condition>

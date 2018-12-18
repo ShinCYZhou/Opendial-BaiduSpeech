@@ -30,7 +30,7 @@
 		
 		<!-- We start the dialogue by asking for the destination -->
 		<variable id="current_step">
-			<value>do_have_bank_account</value>
+			<value>what_service</value>
 		</variable>
 
 	</initialstate>

@@ -7,6 +7,16 @@
     <rule>
 		<case>
 			<condition>
+				<if value="(* open * bank account|* open * account)" relation="contains" var="u_u"/>
+			</condition>
+			<effect>
+				<set value="Confirm_service" var="a_u" exclusive="false"/>
+		  
+			</effect>
+		</case>
+		
+		<case>
+			<condition>
 				<if value="(yes|correct|exactly|sure|right|ok|yeah)" relation="contains" var="u_u"/>
 			</condition>
 			<effect>

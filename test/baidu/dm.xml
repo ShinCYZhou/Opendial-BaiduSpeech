@@ -26,6 +26,18 @@
     <!-- 更新状态 -->
     <rule>
 	
+	<!-- 还没有本行账户,flag -->
+	 <case>
+        <condition>
+		  <if value="what_service" var="current_step"/>
+           <if value="Confirm_service" relation="contains" var="a_u"/>
+        </condition>
+        <effect prob="1">
+		  
+          <set value="do_have_bank_account" var="current_step"/>
+        </effect>
+      </case>
+	  
 	  <!-- 还没有本行账户,flag -->
       <case>
         <condition>
